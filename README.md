@@ -10,10 +10,17 @@ It's a single executable written in C, and therefore can be used on any shell by
 #### A git repo with some changes
 ![A git repo with some changes](Screenshots/Promptsynth_Screenshot_01.png)
 
-By default, staged changes appear in green and unstaged changes appear in yellow. (You can customize these colors).
+_Meaning of symbols:_
+* `+1 ~1 -0` (in green): One added file, one modified file and no deleted files are staged.
+* `+0 ~0 -1` (in orange/yellow): one file is deleted and this is not yet staged.
+* `≡`: This repo is even with origin branch.[^noremotecall]
 
 #### A git repo with 1 unpushed commit and a stash entry
 ![A git repo with 1 unpushed commit and a stash entry](Screenshots/Promptsynth_Screenshot_02.png)
+
+_Meaning of symbols:_
+* `↑1`: Your local branch is one commit ahead of remote tracking branch, according to information stored in git.[^noremotecall]
+* `⚑1`: There's a stash entry
 
 ## Installation
 
@@ -101,3 +108,5 @@ cmake --build . --target promptsynth_test
 * The functionality / prompt contents are almost same as [posh-git](https://github.com/dahlbyk/posh-git) module for Powershell.
 * All git heavy lifting is done by [libgit2](https://github.com/libgit2/libgit2), which is vendored and statically linked.
 * The flag symbol for stash entry is inspired by [bash-git-prompt](https://github.com/magicmonty/bash-git-prompt/).
+
+[^noremotecall]: (this is based on locally stored information. `promptsynth` doesnt make any requests to remotes because such request may require authentication.).
