@@ -2,9 +2,11 @@
 
 An informative git prompt.
 
-It displays more information compared to most other git prompts.
+* It displays more information compared to most other git prompts. See screenshots below.
 
-It's a single executable written in C, and therefore can be used on any shell by calling it from `PS1` or equivalent.
+* It's a single executable written in C, and therefore can be used on any shell by calling it from `PS1` or equivalent.
+
+* It's clutterless and to-the-point. (m.y s.u.b.j.e.c.t.i.v.e o.p.i.n.i.on)
 
 ## Screenshots
 #### A git repo with some changes
@@ -85,7 +87,7 @@ export PROMPTSYNTH_SEPARATOR="|"
 
 ```bash
 git clone --recurse-submodules https://github.com/mahesh-hegde/promptsynth.git
-cd promptsynth-c
+cd promptsynth
 
 ## CMake build
 mkdir build && cd build
@@ -97,9 +99,9 @@ mv promptsynth ~/.local/bin
 ```
 
 ### Running tests
+Follow the above tests for building, then from build directory, build the test executable and run it.
 
 ```bash
-mkdir -p build && cd build
 cmake --build . --target promptsynth_test
 ./promptsynth_test
 ```
