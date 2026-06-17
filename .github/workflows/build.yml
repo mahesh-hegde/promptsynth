@@ -16,7 +16,7 @@ jobs:
         run: mkdir build
       - name: Configure CMake Build
         working-directory: ./build
-        run: cmake -DCMAKE_BUILD_TYPE=Release ..
+        run: cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF ..
       - name: Build executable
         working-directory: ./build
         run: cmake --build . && mv ./promptsynth ./promptsynth-linux
