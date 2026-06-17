@@ -14,9 +14,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libssl-dev libpcre3-dev cmake build-essential
       - name: Create build directory
         run: mkdir build
+      - name: verify CMake config
+        run: cat CMakeLists.txt && cmake --version
       - name: Configure CMake Build
         working-directory: ./build
-        run: cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF ..
+        run: cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DUSE_HTTPS=OFF -DUSE_NTLMCLIENT=OFF ..
       - name: Build executable
         working-directory: ./build
         run: cmake --build . && mv ./promptsynth ./promptsynth-linux
