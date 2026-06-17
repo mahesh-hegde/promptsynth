@@ -18,7 +18,12 @@ jobs:
         run: cat CMakeLists.txt && cmake --version
       - name: Configure CMake Build
         working-directory: ./build
-        run: cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DUSE_HTTPS=OFF -DUSE_NTLMCLIENT=OFF ..
+        # TODO: Figure out why the CMake `set` is not working
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF \
+            -DUSE_HTTPS=OFF -DUSE_NTLMCLIENT=OFF -DREGEX_BACKEND=builtin \
+            -DUSE_BUNDLED_ZLIB=ON -DUSE_GSSAPI=OFF -DUSE_NTLMCLIENT=OFF \
+            -DENABLE_REPRODUCIBLE_BUILDS=ON ..
       - name: Build executable
         working-directory: ./build
         run: cmake --build . && mv ./promptsynth ./promptsynth-linux
