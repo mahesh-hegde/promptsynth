@@ -29,7 +29,7 @@ jobs:
             -DENABLE_REPRODUCIBLE_BUILDS=ON ..
       - name: Build executable
         working-directory: ./build
-        run: cmake --build . && mv ./promptsynth ./promptsynth-linux
+        run: cmake --build .
       - name: Ensure the binary is statically linked
         working-directory: ./build
         run: (file ./promptsynth | grep "statically linked") || (ldd ./promptsynth && false)
@@ -41,7 +41,9 @@ jobs:
           GH_REF_NAME: ${{ github.ref_name }}
         working-directory: ./build
         name: Publish Release to GitHub
-        run: gh release create "$GH_REF_NAME" ./promptsynth-linux --notes "Auto-generated release"
+        run: |
+          mv ./promptsynth ./promptsynth-linux
+          gh release create "$GH_REF_NAME" ./promptsynth-linux --notes "Auto-generated release"
 concurrency:
   group: "prompsynth-build-publish"
   cancel-in-progress: true
