@@ -34,7 +34,10 @@ jobs:
         run: (file ./promptsynth | grep "statically linked") || (ldd ./promptsynth && false)
       - name: Run tests
         working-directory: ./build
-        run: ./promptsynth_test
+        run: |
+          git config --global user.email "test@example.com"
+          git config --global user.name "Test Name"
+          ./promptsynth_test
       - env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REF_NAME: ${{ github.ref_name }}
