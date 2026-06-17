@@ -1,0 +1,48 @@
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+  packages: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libssl-dev libpcre3-dev cmake build-essential
+      - name: Create build directory
+        run: mkdir build
+      - name: verify CMake config
+        run: cat CMakeLists.txt && cmake --version
+      - name: Configure CMake Build
+        working-directory: ./build
+        # TODO: Figure out why the CMake `set` is not working
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF \
+            -DUSE_HTTPS=OFF -DUSE_NTLMCLIENT=OFF -DREGEX_BACKEND=builtin \
+            -DUSE_BUNDLED_ZLIB=ON -DUSE_GSSAPI=OFF -DUSE_NTLMCLIENT=OFF \
+            -DENABLE_REPRODUCIBLE_BUILDS=ON ..
+      - name: Build executable
+        working-directory: ./build
+        run: cmake --build .
+      - name: Ensure the binary is statically linked
+        working-directory: ./build
+        run: (file ./promptsynth | grep "statically linked") || (ldd ./promptsynth && false)
+      - name: Run tests
+        working-directory: ./build
+        run: ./promptsynth_test
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REF_NAME: ${{ github.ref_name }}
+        working-directory: ./build
+        name: Publish Release to GitHub
+        run: |
+          mv ./promptsynth ./promptsynth-linux
+          gh release create "$GH_REF_NAME" ./promptsynth-linux --notes "Auto-generated release"
+concurrency:
+  group: "prompsynth-build-publish"
+  cancel-in-progress: true
